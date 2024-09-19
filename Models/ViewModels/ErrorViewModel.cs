@@ -1,4 +1,4 @@
-namespace Postagens.NET.Models
+namespace Postagens.NET.Models.ViewModels
 {
     public class ErrorViewModel
     {

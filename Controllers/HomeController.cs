@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Postagens.NET.Models;
+using Postagens.NET.Models.ViewModels;
 using System.Diagnostics;
+
 
 namespace Postagens.NET.Controllers
 {
