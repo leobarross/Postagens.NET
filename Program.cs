@@ -1,7 +1,17 @@
+using Microsoft.EntityFrameworkCore;
+using Postagens.NET.Data;
+using Postagens.NET.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<PostagensDbContext>(options =>
+ options.UseSqlServer(builder.Configuration.GetConnectionString("StringConexao")));
+
+builder.Services.AddScoped<TagService>();
+
 
 var app = builder.Build();
 

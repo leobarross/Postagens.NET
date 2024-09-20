@@ -1,3 +1,33 @@
-﻿@{
+﻿@model IEnumerable<Postagens.NET.Models.Tag>
+
+@{
     ViewData["Title"] = "Categorias";
 }
+<div ng-controller="tagCtrll">
+    <h2>Tags</h2>
+    <a asp-action="Cadastro" class="btn btn-primary">Cadastrar</a>
+    <table class=" table table-striped">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Nome</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Nome</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm">Editar</button>
+                        <button class="btn btn-danger btn-sm">Excluir</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
