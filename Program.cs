@@ -11,6 +11,7 @@ builder.Services.AddDbContext<PostagensDbContext>(options =>
  options.UseSqlServer(builder.Configuration.GetConnectionString("StringConexao")));
 
 builder.Services.AddScoped<TagService>();
+builder.Services.AddScoped<CategoriaService>();
 
 
 var app = builder.Build();

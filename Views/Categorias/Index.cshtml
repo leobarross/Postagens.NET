@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Postagens.NET.Models.Categoria>
+
+    @{
+        ViewData["Title"] = "Categorias";
+    }
+
+    <div>
+        <h2>Categorias</h2>
+    <a class="btn btn-primary" asp-area="" asp-controller="Tags" asp-action="Cadastro">Cadastrar</a>
+
+    <table class="table table-striped"> 
+    <thead>
+            <tr>
+                <td>Código</td>
+                <td>Nome</td>
+            </tr>
+    </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Nome</td>
+                    <td>
+                        <a href="/Tags/Cadastro/@item.Id" class="btn btn-primary">Editar</a>
+                        <button class="btn btn-danger btn-sm" ng-click="abrirModalExclusao(@item.Id)">Excluir</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+</table>
+
+    </div>
