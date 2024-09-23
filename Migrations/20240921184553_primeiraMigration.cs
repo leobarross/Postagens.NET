@@ -25,19 +25,6 @@ namespace Postagens.NET.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tags",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tags", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Publicacoes",
                 columns: table => new
                 {
@@ -61,51 +48,43 @@ namespace Postagens.NET.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PublicacaoTag",
+                name: "Tags",
                 columns: table => new
                 {
-                    PublicacaoId = table.Column<int>(type: "int", nullable: false),
-                    TagId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PublicacaoId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PublicacaoTag", x => new { x.PublicacaoId, x.TagId });
+                    table.PrimaryKey("PK_Tags", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PublicacaoTag_Publicacoes_PublicacaoId",
+                        name: "FK_Tags_Publicacoes_PublicacaoId",
                         column: x => x.PublicacaoId,
                         principalTable: "Publicacoes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PublicacaoTag_Tags_TagId",
-                        column: x => x.TagId,
-                        principalTable: "Tags",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PublicacaoTag_TagId",
-                table: "PublicacaoTag",
-                column: "TagId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Publicacoes_CategoriaId",
                 table: "Publicacoes",
                 column: "CategoriaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tags_PublicacaoId",
+                table: "Tags",
+                column: "PublicacaoId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PublicacaoTag");
+                name: "Tags");
 
             migrationBuilder.DropTable(
                 name: "Publicacoes");
-
-            migrationBuilder.DropTable(
-                name: "Tags");
 
             migrationBuilder.DropTable(
                 name: "Categorias");

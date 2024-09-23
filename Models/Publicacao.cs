@@ -13,8 +13,9 @@ namespace Postagens.NET.Models
         public required string Conteudo { get; set; }
         [Required]
         public required DateTime DataPublicacao { get; set; }
-        public int CategoriaId { get; set; }
+
         public required Categoria Categoria { get; set; }
+        public int CategoriaId { get; set; }
 
         // Relacionamento com Tags (muitos-para-muitos)
         public virtual ICollection<Tag>? Tags { get; set; } = new List<Tag>();

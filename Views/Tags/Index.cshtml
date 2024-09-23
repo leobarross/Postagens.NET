@@ -5,7 +5,9 @@
 }
 <div ng-controller="tagCtrll">
     <h2>Tags</h2>
-    <a asp-action="Cadastro" class="btn btn-primary">Cadastrar</a>
+    
+    <a class="btn btn-primary" asp-area="" asp-controller="Tags" asp-action="Cadastro">Cadastrar</a>
+
     <table class=" table table-striped">
         <thead>
             <tr>
@@ -21,13 +23,34 @@
                     <td>@item.Id</td>
                     <td>@item.Nome</td>
                     <td>
-                        <button class="btn btn-warning btn-sm">Editar</button>
-                        <button class="btn btn-danger btn-sm">Excluir</button>
+                        <a href="/Tags/Cadastro/@item.Id" class="btn btn-primary">Editar</a>
+                        <button class="btn btn-danger btn-sm" ng-click="abrirModalExclusao(@item.Id)">Excluir</button>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 
+    <!-- Modal de Confirmação -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalLabel">Confirmação de Exclusão</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Você tem certeza que deseja excluir esta tag?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" ng-click="confirmarExclusao()">Excluir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
+
+
 

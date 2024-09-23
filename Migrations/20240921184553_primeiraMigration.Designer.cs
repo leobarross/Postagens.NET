@@ -12,7 +12,7 @@ using Postagens.NET.Data;
 namespace Postagens.NET.Migrations
 {
     [DbContext(typeof(PostagensDbContext))]
-    [Migration("20240920032509_primeiraMigration")]
+    [Migration("20240921184553_primeiraMigration")]
     partial class primeiraMigration
     {
         /// <inheritdoc />
@@ -86,30 +86,20 @@ namespace Postagens.NET.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("PublicacaoId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("PublicacaoId");
+
                     b.ToTable("Tags");
-                });
-
-            modelBuilder.Entity("PublicacaoTag", b =>
-                {
-                    b.Property<int>("PublicacaoId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TagId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PublicacaoId", "TagId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("PublicacaoTag");
                 });
 
             modelBuilder.Entity("Postagens.NET.Models.Publicacao", b =>
                 {
                     b.HasOne("Postagens.NET.Models.Categoria", "Categoria")
-                        .WithMany()
+                        .WithMany("Publicacoes")
                         .HasForeignKey("CategoriaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -117,19 +107,21 @@ namespace Postagens.NET.Migrations
                     b.Navigation("Categoria");
                 });
 
-            modelBuilder.Entity("PublicacaoTag", b =>
+            modelBuilder.Entity("Postagens.NET.Models.Tag", b =>
                 {
                     b.HasOne("Postagens.NET.Models.Publicacao", null)
-                        .WithMany()
-                        .HasForeignKey("PublicacaoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Tags")
+                        .HasForeignKey("PublicacaoId");
+                });
 
-                    b.HasOne("Postagens.NET.Models.Tag", null)
-                        .WithMany()
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            modelBuilder.Entity("Postagens.NET.Models.Categoria", b =>
+                {
+                    b.Navigation("Publicacoes");
+                });
+
+            modelBuilder.Entity("Postagens.NET.Models.Publicacao", b =>
+                {
+                    b.Navigation("Tags");
                 });
 #pragma warning restore 612, 618
         }

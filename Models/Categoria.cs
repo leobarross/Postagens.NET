@@ -7,5 +7,7 @@ namespace Postagens.NET.Models
         public int Id { get; set; }
         [Required]
         public required string Nome { get; set; }
+
+        public ICollection<Publicacao> Publicacoes { get; set; } = new List<Publicacao>();
     }
 }

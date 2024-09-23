@@ -1,20 +1,9 @@
-﻿
-@{
-    ViewData["Title"] = "Cadastro";
-}
-
-<h2>Cadastro</h2>
-<hr/>
-<div class="row">
-    <div class="col-md-6">
-        <form ng-submit="salvar()">
-            <div class="form-group">
-              <label>Nome</label>
-              <input class="form-control" />
-            </div>
-            <div>
-                <button type="submit" style="margin-bottom:auto;" class="btn btn-primary">Cadastrar</button>
-            </div>
-        </form>
-    </div>
-</div>
+﻿<div ng-controller="tagCtrll">
+    <form class="mb-md-4" ng-submit="salvar()" ng-init="lerUrl()">
+        <div class="col-md-4">
+            <label for="nome">Nome</label>
+            <input class="form-control" type="text" name="nome" ng-model="tag.nome" />
+        </div>      
+    </form>  
+    <button class="btn btn-primary">Salvar</button>
+ </div>
