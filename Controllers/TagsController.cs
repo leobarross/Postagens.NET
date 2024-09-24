@@ -37,10 +37,21 @@ namespace Postagens.NET.Controllers
 
 
         [HttpPost]
-        public IActionResult Cadastro([FromBody] Tag tag)
+        [ValidateAntiForgeryToken]
+        public IActionResult Cadastro(Tag tag)
         {
-            _tagService.InserirTag(tag);
-            return Ok(tag);
+            if (tag.Id > 0)
+            {
+                _tagService.UpdateTag(tag);
+                return RedirectToAction("Index");
+
+            }
+            else
+            {
+                _tagService.InserirTag(tag);
+                return RedirectToAction("Index");
+            }
+            
         }
 
         [HttpGet]
@@ -55,23 +66,18 @@ namespace Postagens.NET.Controllers
         }
         
         [HttpPut]
-        public IActionResult Editar(int id, [FromBody] Tag tagAtualizada)
+        [HttpGet]
+        public IActionResult Editar(int id)
         {
-            if (id != tagAtualizada.Id)
+            var tag = _tagService.BuscarPorId(id);  // Método que busca a tag pelo ID
+            if (tag == null)
             {
-                return BadRequest("O ID da tag não corresponde ao ID da URL.");
+                return NotFound();
             }
 
-            try
-            {
-                _tagService.UpdateTag(tagAtualizada);
-                return Ok(tagAtualizada);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return PartialView("Cadastro", tag); // Renderiza o modal com os dados preenchidos
         }
+
 
 
         [HttpDelete]
