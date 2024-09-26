@@ -19,23 +19,6 @@ namespace Postagens.NET.Controllers
             return View(tags);
         }
 
-        public IActionResult Cadastro(int? id)
-        {
-            Tag? tag = null;
-
-            if (id.HasValue)
-            {
-                tag = _tagService.BuscarPorId(id.Value);
-                if (tag == null)
-                {
-                    return NotFound();
-                }
-            }
-
-            return View(tag);  // Retorna a view com a tag carregada ou null
-        }
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Cadastro(Tag tag)
@@ -65,26 +48,19 @@ namespace Postagens.NET.Controllers
             return Ok(tag);
         }
         
-        [HttpPut]
-        [HttpGet]
-        public IActionResult Editar(int id)
+        [HttpPost]
+        public IActionResult Excluir(Tag tag)
         {
-            var tag = _tagService.BuscarPorId(id);  // Método que busca a tag pelo ID
-            if (tag == null)
+            if(tag.Id > 0)
             {
-                return NotFound();
+            _tagService.DeletarTag(tag.Id);
+             return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                throw new Exception();
             }
 
-            return PartialView("Cadastro", tag); // Renderiza o modal com os dados preenchidos
-        }
-
-
-
-        [HttpDelete]
-        public IActionResult Excluir(int id)
-        {
-            _tagService.DeletarTag(id);
-            return Ok();
         }
     }
 }

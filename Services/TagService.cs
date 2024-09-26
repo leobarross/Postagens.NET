@@ -77,7 +77,5 @@ namespace Postagens.NET.Services
                 throw new Exception("Tag não encontrada.");
             }
         }
-
-
     }
 }

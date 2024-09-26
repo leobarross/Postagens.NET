@@ -4,25 +4,32 @@
     ViewData["Title"] = "Categorias";
 }
 
-<div>
-    <h2>Categorias</h2>
-    <a class="btn btn-primary" asp-area="" asp-controller="Tags" asp-action="Cadastro">Cadastrar</a>
+<h1>@ViewData["Title"]</h1>
 
-    <table class="table table-striped">
+<div ng-controller="categoriaCtrll" style="width: 80%; margin: 0 auto;">
+    
+    <div style="width: 80%; display: flex; justify-content: flex-end; margin-bottom: 15px;">
+        <button class="btn btn-success" ng-click="abrirModalCadastro()">Cadastrar</button>
+    </div>
+
+    <table class="table table-sm" style="width: 80%; table-layout: auto;">
         <thead>
             <tr>
-                <td>Código</td>
-                <td>Nome</td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Nome)
+                </th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.Id</td>
-                    <td>@item.Nome</td>
                     <td>
-                        <a href="/Tags/Cadastro/@item.Id" class="btn btn-primary">Editar</a>
+                        @Html.DisplayFor(modelItem => item.Nome)
+                    </td>
+                    <td style="text-align: right;">
+                        <button class="btn btn-warning btn-sm" ng-click="abrirModalEdicao(@item.Id)">Editar</button>
                         <button class="btn btn-danger btn-sm" ng-click="abrirModalExclusao(@item.Id)">Excluir</button>
                     </td>
                 </tr>
@@ -30,4 +37,29 @@
         </tbody>
     </table>
 
+    <!-- Modal de Confirmação -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalLabel">Confirmação de Exclusão</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form asp-action="Excluir" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" name="id" ng-value="categoria.id" />
+                        Você tem certeza que deseja excluir?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Confirmar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <partial name="Cadastro" />
 </div>
+
+

@@ -1,4 +1,4 @@
-﻿<div class="modal fade" id="modalCadastroTag" tabindex="-1" role="dialog" aria-labelledby="modalCadastroLabel" aria-hidden="true">
+﻿<div class="modal fade" id="modalCadastro" tabindex="-1" role="dialog" aria-labelledby="modalCadastroLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -6,8 +6,8 @@
             </div>
             <form method="post" asp-action="Cadastro">
                 <div class="modal-body">
-                    <input type="hidden" name="id" ng-value="tag.id" />
-                    <input type="text" name="nome" class="form-control" ng-model="tag.nome">
+                    <input type="hidden" name="id" ng-value="categoria.id" />
+                    <input type="text" name="nome" class="form-control" ng-model="categoria.nome">
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Salvar</button>
