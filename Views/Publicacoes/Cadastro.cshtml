@@ -1,0 +1,16 @@
+﻿<div ng-controller="publicacaoCtrll">
+    <form ng-init="carregarCategorias()">
+        <div class="form-group col-md-6">
+            <label>Título</label>
+            <input class="form-control" type="text" placeholder="Título da publicação"  />
+        </div>
+
+        <div class="form-group col-md-4">
+        <select class="form-control" ng-model="publicacao.categoriaId">
+            <option value="" disabled selected>Selecione uma Categoria</option>
+            <option ng-repeat="categoria in categorias" value="{{categoria.id}}">{{categoria.nome}}</option>
+        </select>
+        </div>
+        <button class="btn btn-primary mt-3">Salvar</button>
+    </form>
+</div>

@@ -13,34 +13,40 @@ namespace Poscategoriaens.NET.Controllers
             _service = service;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var categorias = _service.BuscarTodas();
+            var categorias = await _service.BuscarCategoriasAsync();
             return View(categorias);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> ListarCategorias()
+        {
+            var categorias = await _service.BuscarCategoriasAsync();
+            return Json(categorias);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Cadastro(Categoria categoria)
+        public async Task<IActionResult> Cadastro(Categoria categoria)
         {
             if (categoria.Id > 0)
             {
-                _service.UpdateCategoria(categoria);
+                await _service.UpdateAsync(categoria);
                 return RedirectToAction("Index");
 
             }
             else
             {
-                _service.InserirCategoria(categoria);
+                await _service.InsertAsync(categoria);
                 return RedirectToAction("Index");
             }
-
         }
 
         [HttpGet]
-        public IActionResult BuscarUmaCategoria(int id)
+        public async Task<IActionResult> BuscarUmaCategoria(int id)
         {
-            var categoria = _service.BuscarPorId(id);
+            var categoria = await _service.BuscarPorIdAsync(id);
             if (categoria == null)
             {
                 return NotFound();
@@ -49,11 +55,11 @@ namespace Poscategoriaens.NET.Controllers
         }
 
         [HttpPost]
-        public IActionResult Excluir(Categoria categoria)
+        public async Task<IActionResult> Excluir(Categoria categoria)
         {
             if (categoria.Id > 0)
             {
-                _service.DeletarCategoria(categoria.Id);
+                await _service.DeleteAsync(categoria.Id);
                 return RedirectToAction(nameof(Index));
             }
             else

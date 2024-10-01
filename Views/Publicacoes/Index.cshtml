@@ -1,0 +1,81 @@
+﻿@model IEnumerable<Postagens.NET.Models.Publicacao>
+
+@{
+    ViewData["Title"] = "Publicações";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<a class="btn btn-success" style="float:right;" asp-action="Cadastro">Cadastro</a>
+<div ng-controller="publicacaoCtrll">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Titulo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Imagem)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Conteudo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DataPublicacao)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Categoria)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Titulo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Imagem)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Conteudo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DataPublicacao)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Categoria.Nome)
+                    </td>
+                    <td style="text-align: right;">
+                        <button class="btn btn-warning btn-sm" ng-click="abrirModalEdicao(@item.Id)">Editar</button>
+                        <button class="btn btn-danger btn-sm" ng-click="abrirModal(@item.Id)">Excluir</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- Modal de Confirmação -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalLabel">Confirmação de Exclusão</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form asp-action="Excluir" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" name="id" ng-value="publicacao.id" />
+                        Você tem certeza que deseja excluir?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Confirmar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

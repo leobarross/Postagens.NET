@@ -6,71 +6,55 @@ namespace Postagens.NET.Services
 {
     public class TagService
     {
-        private readonly PostagensDbContext _dbContext;
+        private readonly PostagensDbContext _context;
 
         public TagService(PostagensDbContext dbContext)
         {
-            _dbContext = dbContext;
+            _context = dbContext;
         }
 
-        public List<Tag> BuscarTodas()
+        public async Task<List<Tag>> BuscarTagsAsync()
         {
-            return _dbContext.Tags.ToList();
+            return await _context.Tags.ToListAsync();
         }
 
-        public Tag? BuscarPorId(int id)
+        public async Task<Tag?> BuscarPorIdAsync(int id)
         {
-
-            var tag = _dbContext.Tags.FirstOrDefault(tag => tag.Id == id);
-            if (tag == null)
-            {
-                throw new Exception("Tag não encontrada.");
-            }
-            return tag;
-
+            return await _context.Tags.FindAsync(id);
         }
 
-        public Tag InserirTag(Tag tag)
+        public async Task InsertAsync(Tag tag)
         {
-            if (!_dbContext.Tags.Any(t => t.Nome == tag.Nome))
-            {
-                _dbContext.Tags.Add(tag);
-                _dbContext.SaveChanges();
-                return tag;
-            }
-            else
+            if (await _context.Tags.AnyAsync(t => t.Nome == tag.Nome))
             {
                 throw new Exception("Tag com esse nome já existe.");
             }
-
+            _context.Tags.Add(tag);
+            await _context.SaveChangesAsync();
         }
 
-        public void UpdateTag(Tag tag)
+        public async Task UpdateAsync(Tag tag)
         {
-            var tagExistente = _dbContext.Tags.Find(tag.Id);
-
-            if (tagExistente == null)
+            if (!await _context.Tags.AnyAsync(t => t.Id == tag.Id))
             {
-                throw new Exception("Tag não encontrada.");
+                throw new Exception("Id não encontrado");
             }
 
-            
-            if (_dbContext.Tags.Any(t => t.Nome == tag.Nome && t.Id != tag.Id))
+            if (await _context.Tags.AnyAsync(t => t.Nome == tag.Nome && t.Id != tag.Id))
             {
                 throw new Exception("Já existe uma tag com esse nome.");
             }
-            
-            tagExistente.Nome = tag.Nome;
-           
-            _dbContext.SaveChanges();
+
+            _context.Update(tag);
+            await _context.SaveChangesAsync();
         }
-        public void DeletarTag(int id)
+        public async Task DeleteAsync(int id)
         {
-            var tag = _dbContext.Tags.Find(id);
+            var tag = await _context.Tags.FindAsync(id);
             if (tag != null)
             {
-                _dbContext.Tags.Remove(tag);
-                _dbContext.SaveChanges();
+                _context.Tags.Remove(tag);
+                await _context.SaveChangesAsync();
             }
             else
             {

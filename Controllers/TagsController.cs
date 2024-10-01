@@ -6,41 +6,40 @@ namespace Postagens.NET.Controllers
 {
     public class TagsController : Controller
     {
-        private readonly TagService _tagService;
+        private readonly TagService _service;
 
         public TagsController(TagService tagService)
         {
-            _tagService = tagService;
+            _service = tagService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var tags = _tagService.BuscarTodas();
+            var tags = await _service.BuscarTagsAsync();
             return View(tags);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Cadastro(Tag tag)
+        public async Task <IActionResult> Cadastro(Tag tag)
         {
             if (tag.Id > 0)
             {
-                _tagService.UpdateTag(tag);
+                await _service.UpdateAsync(tag);
                 return RedirectToAction("Index");
-
             }
             else
             {
-                _tagService.InserirTag(tag);
+                await _service.InsertAsync(tag);
                 return RedirectToAction("Index");
             }
             
         }
 
         [HttpGet]
-        public IActionResult BuscarPorId(int id)
+        public async Task <IActionResult> BuscarPorId(int id)
         {
-            var tag = _tagService.BuscarPorId(id);
+            var tag =  await _service.BuscarPorIdAsync(id);
             if (tag == null)
             {
                 return NotFound();
@@ -49,11 +48,11 @@ namespace Postagens.NET.Controllers
         }
         
         [HttpPost]
-        public IActionResult Excluir(Tag tag)
+        public async Task <IActionResult> Excluir(Tag tag)
         {
             if(tag.Id > 0)
             {
-            _tagService.DeletarTag(tag.Id);
+             await _service.DeleteAsync(tag.Id);
              return RedirectToAction(nameof(Index));
             }
             else

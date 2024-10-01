@@ -12,6 +12,7 @@ builder.Services.AddDbContext<PostagensDbContext>(options =>
 
 builder.Services.AddScoped<TagService>();
 builder.Services.AddScoped<CategoriaService>();
+builder.Services.AddScoped<PublicacaoServices>();
 
 
 var app = builder.Build();
