@@ -71,6 +71,21 @@ namespace Postagens.NET.Migrations
                     b.ToTable("Publicacoes");
                 });
 
+            modelBuilder.Entity("Postagens.NET.Models.PublicacaoTag", b =>
+                {
+                    b.Property<int>("PublicacaoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TagId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PublicacaoId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("PublicacaoTags");
+                });
+
             modelBuilder.Entity("Postagens.NET.Models.Tag", b =>
                 {
                     b.Property<int>("Id")
@@ -83,12 +98,7 @@ namespace Postagens.NET.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PublicacaoId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("PublicacaoId");
 
                     b.ToTable("Tags");
                 });
@@ -96,7 +106,7 @@ namespace Postagens.NET.Migrations
             modelBuilder.Entity("Postagens.NET.Models.Publicacao", b =>
                 {
                     b.HasOne("Postagens.NET.Models.Categoria", "Categoria")
-                        .WithMany("Publicacoes")
+                        .WithMany()
                         .HasForeignKey("CategoriaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -104,21 +114,33 @@ namespace Postagens.NET.Migrations
                     b.Navigation("Categoria");
                 });
 
-            modelBuilder.Entity("Postagens.NET.Models.Tag", b =>
+            modelBuilder.Entity("Postagens.NET.Models.PublicacaoTag", b =>
                 {
-                    b.HasOne("Postagens.NET.Models.Publicacao", null)
-                        .WithMany("Tags")
-                        .HasForeignKey("PublicacaoId");
-                });
+                    b.HasOne("Postagens.NET.Models.Publicacao", "Publicacao")
+                        .WithMany("PublicacaoTags")
+                        .HasForeignKey("PublicacaoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-            modelBuilder.Entity("Postagens.NET.Models.Categoria", b =>
-                {
-                    b.Navigation("Publicacoes");
+                    b.HasOne("Postagens.NET.Models.Tag", "Tag")
+                        .WithMany("PublicacaoTags")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Publicacao");
+
+                    b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("Postagens.NET.Models.Publicacao", b =>
                 {
-                    b.Navigation("Tags");
+                    b.Navigation("PublicacaoTags");
+                });
+
+            modelBuilder.Entity("Postagens.NET.Models.Tag", b =>
+                {
+                    b.Navigation("PublicacaoTags");
                 });
 #pragma warning restore 612, 618
         }

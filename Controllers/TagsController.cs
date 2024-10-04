@@ -37,6 +37,13 @@ namespace Postagens.NET.Controllers
         }
 
         [HttpGet]
+        public async Task<JsonResult> BuscarTags()
+        {
+            var tags = await _service.BuscarTagsAsync();
+            return Json(tags);
+        }
+
+        [HttpGet]
         public async Task <IActionResult> BuscarPorId(int id)
         {
             var tag =  await _service.BuscarPorIdAsync(id);

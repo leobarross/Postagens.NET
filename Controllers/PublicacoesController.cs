@@ -1,6 +1,4 @@
-﻿using Azure;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.DotNet.Scaffolding.Shared.Messaging;
+﻿using Microsoft.AspNetCore.Mvc;
 using Postagens.NET.Models;
 using Postagens.NET.Models.ViewModels;
 using Postagens.NET.Services;
@@ -11,10 +9,12 @@ namespace Pospubliens.NET.Controllers
 {
     public class PublicacoesController : Controller
     {
+        private readonly UploadService _uploadService;
         private readonly PublicacaoServices _service;
 
-        public PublicacoesController(PublicacaoServices service)
+        public PublicacoesController(UploadService uploadService, PublicacaoServices service)
         {
+            _uploadService = uploadService;
             _service = service;
         }
 
@@ -24,23 +24,41 @@ namespace Pospubliens.NET.Controllers
             return View(publicacoes);
         }
 
+        public IActionResult Cadastro()
+        {
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Cadastro(Publicacao publi)
+        public async Task<IActionResult> Cadastro(Publicacao publi, List<int> tagIds, IFormFile imagem)
         {
-            if(publi.Id > 0)
+            try
+            {
+                if (imagem != null && imagem.Length > 0)
+                {
+                    publi.Imagem = await _uploadService.SaveFileAsync(imagem);
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "Erro ao salvar a imagem: " + ex.Message);
+            }
+
+            if (publi.Id > 0)
             {
                 await _service.UpdateAsync(publi);
-                return RedirectToAction("Index");
             }
             else
             {
-                await _service.InsertAsync(publi);
-                return RedirectToAction("Index");
-            }           
-        }
+                await _service.InsertAsync(publi, tagIds);
+            }
 
-        public async Task<IActionResult> BuscarPublicacao(int id)
+            return RedirectToAction(nameof(Index));
+        }
+    
+
+    public async Task<IActionResult> BuscarPublicacao(int id)
         {
             var publi = await _service.BuscarPorIdAsync(id);
             if (publi == null)
@@ -79,8 +97,6 @@ namespace Pospubliens.NET.Controllers
                 return RedirectToAction(nameof(Error), new { message = e.Message });
             }
         }
-
-
         public IActionResult Error(string Message)
         {
             var viewModel = new ErrorViewModel

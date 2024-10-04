@@ -1,16 +1,32 @@
 ﻿<div ng-controller="publicacaoCtrll">
-    <form ng-init="carregarCategorias()">
+    <form ng-init="carregarDados()" method="post" asp-action="Cadastro" enctype="multipart/form-data">
+        <input type="hidden" name="id" ng-model="publicacao.id" />
         <div class="form-group col-md-6">
             <label>Título</label>
-            <input class="form-control" type="text" placeholder="Título da publicação"  />
+            <input class="form-control" type="text" name="titulo" placeholder="Título da publicação" />
+        </div>
+        <div class="form-group">
+            <label>Conteúdo</label>
+            <textarea class="form-control" name="conteudo" placeholder="Conteúdo da publicação"></textarea>
+        </div>
+        <div class="form-group col-md-6">
+            <label>Imagem</label>
+            <input class="form-control" name="imagem" type="file" />
+        </div>
+        <div class="form-group col-md-4">
+            <label>Categoria</label>
+            <select class="form-control" name="categoriaid" ng-model="publicacao.categoriaId">
+                <option value="" disabled selected>Selecione uma Categoria</option>
+                <option ng-repeat="categoria in categorias" value="{{categoria.id}}">{{categoria.nome}}</option>
+            </select>
         </div>
 
         <div class="form-group col-md-4">
-        <select class="form-control" ng-model="publicacao.categoriaId">
-            <option value="" disabled selected>Selecione uma Categoria</option>
-            <option ng-repeat="categoria in categorias" value="{{categoria.id}}">{{categoria.nome}}</option>
-        </select>
+            <label>Tags</label>
+            <select class="form-control" name="tagIds" ng-model="publicacao.tagIds" multiple>
+                <option ng-repeat="tag in tags" value="{{tag.id}}">{{tag.nome}}</option>
+            </select>
         </div>
-        <button class="btn btn-primary mt-3">Salvar</button>
+        <button type="submit" class="btn btn-primary mt-3">Salvar</button>
     </form>
 </div>

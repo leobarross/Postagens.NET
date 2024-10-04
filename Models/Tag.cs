@@ -7,5 +7,8 @@ namespace Postagens.NET.Models
         public int Id { get; set; }
         [Required]
         public required string Nome { get; set; }
+
+        // Relacionamento direto com Publicacoes
+        public virtual ICollection<PublicacaoTag> PublicacaoTags { get; set; } = new List<PublicacaoTag>();
     }
 }

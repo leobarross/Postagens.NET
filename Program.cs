@@ -13,6 +13,7 @@ builder.Services.AddDbContext<PostagensDbContext>(options =>
 builder.Services.AddScoped<TagService>();
 builder.Services.AddScoped<CategoriaService>();
 builder.Services.AddScoped<PublicacaoServices>();
+builder.Services.AddScoped<UploadService>();
 
 
 var app = builder.Build();

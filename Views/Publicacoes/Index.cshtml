@@ -7,55 +7,55 @@
 <h1>@ViewData["Title"]</h1>
 
 <a class="btn btn-success" style="float:right;" asp-action="Cadastro">Cadastro</a>
+
 <div ng-controller="publicacaoCtrll">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Titulo)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Imagem)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Conteudo)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DataPublicacao)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Categoria)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Titulo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Imagem)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Conteudo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DataPublicacao)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Categoria.Nome)
-                    </td>
-                    <td style="text-align: right;">
-                        <button class="btn btn-warning btn-sm" ng-click="abrirModalEdicao(@item.Id)">Editar</button>
-                        <button class="btn btn-danger btn-sm" ng-click="abrirModal(@item.Id)">Excluir</button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <!-- Ajuste para exibir a imagem usando o caminho armazenado -->
+                    @if (!string.IsNullOrEmpty(item.Imagem))
+                    {
+                        <img src="@item.Imagem" class="card-img-top" alt="Imagem da Publicação" style="max-height: 200px; object-fit: cover;" />
+                    }
+                    else
+                    {
+                        <img src="/imagens/padrao.png" class="card-img-top" alt="Imagem padrão" style="max-height: 200px; object-fit: cover;" />
+                    }
+
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Titulo)</h5>
+                        <p class="card-text">@Html.DisplayFor(modelItem => item.Conteudo)</p>
+                        <p class="card-text"><small class="text-muted">Publicado em: @Html.DisplayFor(modelItem => item.DataPublicacao)</small></p>
+                        <p class="card-text">Categoria: @Html.DisplayFor(modelItem => item.Categoria.Nome)</p>
+
+                        <div>
+                            <strong>Tags:</strong>
+                            @if (item.PublicacaoTags != null && item.PublicacaoTags.Any())
+                            {
+                                <ul>
+                                    @foreach (var pubTag in item.PublicacaoTags)
+                                    {
+                                        <li>@pubTag.Tag.Nome</li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <span>Sem Tags</span>
+                            }
+                        </div>
+
+                        <div class="mt-3">
+                            <button class="btn btn-warning btn-sm" ng-click="abrirModalEdicao(@item.Id)">Editar</button>
+                            <button class="btn btn-danger btn-sm" ng-click="abrirModal(@item.Id)">Excluir</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 
     <!-- Modal de Confirmação -->
     <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
