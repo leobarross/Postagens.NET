@@ -23,7 +23,6 @@ namespace Postagens.NET.Services
                 .ToListAsync();
         }
 
-
         public async Task<Publicacao?> BuscarPorIdAsync(int id)
         {
             return await _context.Publicacoes.FindAsync(id);
@@ -54,12 +53,12 @@ namespace Postagens.NET.Services
 
         public async Task UpdateAsync(Publicacao publi)
         {
-            if (!await _context.Publicacoes.AnyAsync(p => p.Id == p.Id))
+            if (!await _context.Publicacoes.AnyAsync(p => p.Id == publi.Id))
             {
                 throw new Exception("Id não encontrado");
             }
 
-            if (await _context.Publicacoes.AnyAsync(p => p.Titulo == p.Titulo))
+            if (await _context.Publicacoes.AnyAsync(p => p.Titulo == publi.Titulo))
             {
                 throw new Exception("Publicação com esse título já existe.");
             }

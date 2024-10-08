@@ -1,32 +1,48 @@
-﻿<div ng-controller="publicacaoCtrll">
-    <form ng-init="carregarDados()" method="post" asp-action="Cadastro" enctype="multipart/form-data">
-        <input type="hidden" name="id" ng-model="publicacao.id" />
+﻿@{
+    ViewData["Title"] = "Cadastro";
+}
+<h2>@ViewData["Title"]</h2>
+
+<div ng-controller="publicacaoCtrll" ng-init="carregarDados();">
+    {{publicacao | json}}
+    <form method="post" asp-action="Cadastro" enctype="multipart/form-data">
+        <input type="hidden" name="id" ng-value="publicacao.id" />
+
         <div class="form-group col-md-6">
             <label>Título</label>
-            <input class="form-control" type="text" name="titulo" placeholder="Título da publicação" />
-        </div>
-        <div class="form-group">
-            <label>Conteúdo</label>
-            <textarea class="form-control" name="conteudo" placeholder="Conteúdo da publicação"></textarea>
-        </div>
-        <div class="form-group col-md-6">
-            <label>Imagem</label>
-            <input class="form-control" name="imagem" type="file" />
-        </div>
-        <div class="form-group col-md-4">
-            <label>Categoria</label>
-            <select class="form-control" name="categoriaid" ng-model="publicacao.categoriaId">
-                <option value="" disabled selected>Selecione uma Categoria</option>
-                <option ng-repeat="categoria in categorias" value="{{categoria.id}}">{{categoria.nome}}</option>
-            </select>
+            <input class="form-control" type="text" name="titulo" placeholder="Título da publicação" ng-model="publicacao.titulo" />
         </div>
 
+        <div class="form-group">
+            <label>Conteúdo</label>
+            <textarea class="form-control" name="conteudo" placeholder="Conteúdo da publicação" ng-model="publicacao.conteudo"></textarea>
+        </div>
+
+        <div class="form-group col-md-6">
+            <label>Imagem</label>
+            <!-- Exibir a imagem existente se houver -->
+            <div ng-if="publicacao.imagem">
+                <img ng-src="{{publicacao.imagem}}" alt="Imagem da publicação" class="img-thumbnail mb-2" style="max-width: 200px; max-height: 200px;" />
+            </div>
+            <input class="form-control" name="imagem" type="file" ng-model="publicacao.Imagem" />
+        </div>
+
+        <div class="form-group col-md-4">
+            <label>Categoria</label>
+            <select class="form-control" name="categoriaId" ng-model="publicacao.categoriaId">
+                <option value="" disabled>Selecione uma Categoria</option>
+                <option ng-repeat="categoria in categorias" value="{{categoria.id}}" ng-selected="categoria.id === publicacao.categoriaId">
+                    {{categoria.nome}}
+                </option>
+            </select>
+        </div>
         <div class="form-group col-md-4">
             <label>Tags</label>
             <select class="form-control" name="tagIds" ng-model="publicacao.tagIds" multiple>
                 <option ng-repeat="tag in tags" value="{{tag.id}}">{{tag.nome}}</option>
             </select>
         </div>
+
         <button type="submit" class="btn btn-primary mt-3">Salvar</button>
     </form>
 </div>

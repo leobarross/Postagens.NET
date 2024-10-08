@@ -48,7 +48,7 @@
                         </div>
 
                         <div class="mt-3">
-                            <button class="btn btn-warning btn-sm" ng-click="abrirModalEdicao(@item.Id)">Editar</button>
+                            <a class="btn btn-warning btn-sm" asp-action="Cadastro" asp-route-id="@item.Id">Editar</a>
                             <button class="btn btn-danger btn-sm" ng-click="abrirModal(@item.Id)">Excluir</button>
                         </div>
                     </div>

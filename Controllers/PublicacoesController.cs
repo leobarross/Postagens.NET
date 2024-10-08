@@ -48,16 +48,17 @@ namespace Pospubliens.NET.Controllers
             if (publi.Id > 0)
             {
                 await _service.UpdateAsync(publi);
+                return RedirectToAction(nameof(Index));
             }
             else
             {
                 await _service.InsertAsync(publi, tagIds);
+                return RedirectToAction(nameof(Index));
             }
 
-            return RedirectToAction(nameof(Index));
+            
         }
     
-
     public async Task<IActionResult> BuscarPublicacao(int id)
         {
             var publi = await _service.BuscarPorIdAsync(id);

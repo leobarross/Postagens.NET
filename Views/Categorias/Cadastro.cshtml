@@ -1,30 +1,20 @@
-﻿<div ng-controller="publicacaoCtrll">
-    <form method="post" asp-action="Cadastro" enctype="multipart/form-data">
-        <div class="form-group col-md-6">
-            <label>Título</label>
-            <input class="form-control" type="text" name="Titulo" placeholder="Título da publicação" />
+﻿<div class="modal fade" id="modalCadastro" tabindex="-1" role="dialog" aria-labelledby="modalCadastroLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCadastroLabel">Cadastro</h5>
+            </div>
+            <form method="post" asp-action="Cadastro">
+                <div class="modal-body">
+                    <input type="hidden" name="id" ng-value="categoria.id" />
+                    <input type="text" name="nome" class="form-control" ng-model="categoria.nome">
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                </div>
+                <input name="__RequestVerificationToken" type="hidden" value="@Html.AntiForgeryToken().ToString()" />
+            </form>
         </div>
-        <div class="form-group">
-            <label>Conteúdo</label>
-            <textarea class="form-control" name="Conteudo" placeholder="Conteúdo da publicação"></textarea>
-        </div>
-        <div class="form-group col-md-6">
-            <label>Imagem</label>
-            <input class="form-control" name="imagem" type="file" />
-        </div>
-        <div class="form-group col-md-4">
-            <label>Categoria</label>
-            <select class="form-control" name="CategoriaId" ng-model="publicacao.categoriaId">
-                <option value="" disabled selected>Selecione uma Categoria</option>
-                <option ng-repeat="categoria in categorias" value="{{categoria.id}}">{{categoria.nome}}</option>
-            </select>
-        </div>
-        <div class="form-group col-md-4">
-            <label>Tags</label>
-            <select class="form-control" name="tagIds" ng-model="publicacao.tagIds" multiple>
-                <option ng-repeat="tag in tags" value="{{tag.id}}">{{tag.nome}}</option>
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary mt-3">Salvar</button>
-    </form>
+    </div>
 </div>

@@ -31,10 +31,26 @@
         });
     };
 
+    $scope.carregarPublicacao = function (id) {
+        $http.get("/publicacoes/BuscarPublicacao/" + id).then(function (response) {
+            $scope.publicacao = response.data;
+
+            // Defina a categoria e as tags apenas após carregar as categorias e tags
+            $scope.publicacao.categoriaId = response.data.categoriaId || "";
+            $scope.publicacao.tagIds = response.data.publicacaoTags.map(tag => tag.id);
+        });
+    };
+
     $scope.carregarDados = function () {
-        console.log("Método foi chamado.")
         $scope.carregarCategorias();
         $scope.carregarTags();
+        $scope.lerUrl();
+    };
+
+    $scope.lerUrl = function () {
+        const url = window.location.href.split("/").pop();
+        if (parseInt(url) > 0)
+            $scope.carregarPublicacao(url);
     };
 
 });
