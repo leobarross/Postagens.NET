@@ -39,6 +39,11 @@ namespace Pospubliens.NET.Controllers
                 {
                     publi.Imagem = await _uploadService.SaveFileAsync(imagem);
                 }
+                else if (publi.Id > 0) // Ao editar, mantenha a imagem existente
+                {
+                    var publicacaoExistente = await _service.BuscarPorIdAsync(publi.Id);
+                    publi.Imagem = publicacaoExistente.Imagem; // Mantenha a imagem existente
+                }
             }
             catch (Exception ex)
             {
@@ -47,7 +52,7 @@ namespace Pospubliens.NET.Controllers
 
             if (publi.Id > 0)
             {
-                await _service.UpdateAsync(publi);
+                await _service.UpdateAsync(publi, tagIds);
                 return RedirectToAction(nameof(Index));
             }
             else
@@ -55,11 +60,9 @@ namespace Pospubliens.NET.Controllers
                 await _service.InsertAsync(publi, tagIds);
                 return RedirectToAction(nameof(Index));
             }
-
-            
         }
-    
-    public async Task<IActionResult> BuscarPublicacao(int id)
+
+        public async Task<IActionResult> BuscarPublicacao(int id)
         {
             var publi = await _service.BuscarPorIdAsync(id);
             if (publi == null)
@@ -68,7 +71,17 @@ namespace Pospubliens.NET.Controllers
             }
             return Ok(publi);
         }
+        public async Task<IActionResult> Detalhes(int id)
+        {
+            var publicacao = await _service.VerDetalhes(id);
 
+            if (publicacao == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Publicação não encontrada." });
+            }
+
+            return View(publicacao); 
+        }
         [HttpPost]
         public async Task<IActionResult> Excluir(int? id)
         {

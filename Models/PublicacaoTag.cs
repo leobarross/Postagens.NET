@@ -6,6 +6,6 @@
         public Publicacao? Publicacao { get; set; }
 
         public int TagId { get; set; }
-        public Tag? Tag { get; set; }
+        public required Tag Tag { get; set; }
     }
 }

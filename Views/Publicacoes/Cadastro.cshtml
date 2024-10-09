@@ -24,7 +24,7 @@
             <div ng-if="publicacao.imagem">
                 <img ng-src="{{publicacao.imagem}}" alt="Imagem da publicação" class="img-thumbnail mb-2" style="max-width: 200px; max-height: 200px;" />
             </div>
-            <input class="form-control" name="imagem" type="file" ng-model="publicacao.Imagem" />
+            <input class="form-control" name="imagem" type="file"/>
         </div>
 
         <div class="form-group col-md-4">
@@ -42,7 +42,7 @@
                 <option ng-repeat="tag in tags" value="{{tag.id}}">{{tag.nome}}</option>
             </select>
         </div>
-
         <button type="submit" class="btn btn-primary mt-3">Salvar</button>
+        <button class="btn btn-secondary mt-3" asp-action="Index">Voltar</button>
     </form>
 </div>

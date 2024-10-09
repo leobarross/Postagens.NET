@@ -43,29 +43,69 @@ namespace Postagens.NET.Services
             {
                 foreach (var tagId in tagIds)
                 {
-                    publi.PublicacaoTags.Add(new PublicacaoTag { Publicacao = publi, TagId = tagId });
+                    var tag = _context.Tags.Find(tagId);
+                    if (tag != null)
+                    {
+                        publi.PublicacaoTags.Add(new PublicacaoTag { Publicacao = publi, TagId = tagId, Tag = tag });
+
+                    }
                 }
             }
 
-            await _context.SaveChangesAsync(); // Salva todas as alterações no contexto
+            await _context.SaveChangesAsync(); 
         }
 
-
-        public async Task UpdateAsync(Publicacao publi)
+        public async Task<Publicacao?> VerDetalhes(int id)
         {
-            if (!await _context.Publicacoes.AnyAsync(p => p.Id == publi.Id))
+            var publicacao = await _context.Publicacoes
+            .Include(p => p.PublicacaoTags)
+                .ThenInclude(pt => pt.Tag) 
+            .FirstOrDefaultAsync(p => p.Id == id);
+
+            return publicacao;
+        }
+
+        public async Task UpdateAsync(Publicacao publi, List<int> tagIds)
+        {       
+            var publicacaoExistente = await _context.Publicacoes
+                .Include(p => p.PublicacaoTags)
+                .FirstOrDefaultAsync(p => p.Id == publi.Id);
+
+            if (publicacaoExistente == null)
             {
-                throw new Exception("Id não encontrado");
+                throw new Exception("Id não encontrado.");
             }
 
-            if (await _context.Publicacoes.AnyAsync(p => p.Titulo == publi.Titulo))
+            if (await _context.Publicacoes.AnyAsync(p => p.Titulo == publi.Titulo && p.Id != publi.Id))
             {
                 throw new Exception("Publicação com esse título já existe.");
             }
 
-            _context.Update(publi);
+            publicacaoExistente.Titulo = publi.Titulo;
+            publicacaoExistente.Conteudo = publi.Conteudo;
+
+            // Mantém a imagem existente se nenhuma nova imagem for fornecida
+            if (!string.IsNullOrEmpty(publi.Imagem))
+            {
+                publicacaoExistente.Imagem = publi.Imagem;
+            }
+
+            publicacaoExistente.PublicacaoTags.Clear();
+
+            if (tagIds != null && tagIds.Count > 0)
+            {
+                foreach (var tagId in tagIds)
+                {
+                    var tag = await _context.Tags.FindAsync(tagId);
+                    if (tag != null)
+                    {
+                        publicacaoExistente.PublicacaoTags.Add(new PublicacaoTag { PublicacaoId = publicacaoExistente.Id, TagId = tagId, Tag = tag });
+                    }
+                }
+            }
             await _context.SaveChangesAsync();
         }
+
         public async Task DeleteAsync(int id)
         {
             try
